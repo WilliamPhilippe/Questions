@@ -2,10 +2,20 @@
 using namespace std;
 
 typedef pair<char, char> par;
+
 vector<char> verify;
 
 map<char, char> letras;
 
+
+int buscar(char x){
+
+	for(int i = 0; i < verify.size(); i++){
+		if( verify[i] == x ) return 1;
+	}
+
+	return 0;
+}
 
 void forma(char *str, char *str2){
 
@@ -14,14 +24,16 @@ void forma(char *str, char *str2){
 
 	while( str[i] != '\0' ){
 
-		if(  ){
+		int existe = buscar(str[i]);
+
+		if( existe ){
 			//existe
 			str2[i] = letras[str[i]];
 		}
 		else{
 			//nao existe
-			letras[str[i]] = cont;
 			verify.push_back(str[i]);
+			letras[str[i]] = cont;
 			cont++;
 			str2[i] = letras[str[i]];
 
@@ -31,7 +43,7 @@ void forma(char *str, char *str2){
 
 	}
 
-	str2[i + 1] = '\0';
+	str2[i] = '\0';
 
 }
 
@@ -44,8 +56,11 @@ int main(){
 		char str[501], str2[501];
 		gets(str);
 
+		letras.clear();
+		verify.clear();
+
 		forma(str, str2);
-		printf("%s\n", str);
+
 		printf("%s\n", str2);
 	}
 
