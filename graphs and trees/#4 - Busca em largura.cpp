@@ -9,8 +9,8 @@ void bfs(int ori){
 
 	queue<int> fila;
 	fila.push(ori);
-	cout << ori;
-	process[ori] = 1;
+	
+	
 
 	while(true){
 
@@ -22,6 +22,8 @@ void bfs(int ori){
 			fila.pop();
 
 			if(!process[next]){
+				cout << next << endl;
+				process[next] = 1;
 				emp = 1;
 				break;
 			}
@@ -31,8 +33,13 @@ void bfs(int ori){
 		if(!emp) return;
 
 		for(int i = viz[next].size() - 1; i >= 0; i--){
-			if( !process[viz[next][i]] ) cout << viz[next][i] << endl;
-			if( !process[viz[next][i]] ) fila.push( viz[next][i] );
+			
+			int atual = viz[next][i];
+
+			if( !process[atual] ){
+				fila.push(atual);
+			}
+
 		}
 
 	}
