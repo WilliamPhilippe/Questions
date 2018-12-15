@@ -7,11 +7,11 @@ typedef tuple <int, int, int> tres;
 typedef pair<int, int> par;
 
 vector< par > vizinos[502];
-int process[502][3];
-int distancia[502][3];
+int process[602][3];
+int distancia[602][3];
 
 void zerar(int n){
-	for(int i = 0; i < n; i++){
+	for(int i = 0; i < n + 5; i++){
 		process[i][0] = 0; process[i][1] = 0; process[i][2] = 0;
 		distancia[i][0] = INT_MAX; distancia[i][1] = INT_MAX; distancia[i][2] = INT_MAX;
 	}
@@ -40,26 +40,31 @@ void dijkstra(int S){
 			}			
 		}
 
+		
+
 		if(act) return;
+
+		//cout << "next >" << next << " estado> " << estado << endl;
 
 		for(int i = 0; i < vizinos[next].size(); i++){
 
 			int outro = vizinos[next][i].first;
+			int new_est = ( distancia[next][estado] + 1 )%3;
 			int new_dist = distancia[next][estado] + 1;
-			int new_est = new_dist%3;
 			int time = vizinos[next][i].second;
 
 			if( distancia[outro][new_est] > new_dist ){
 
-				if(time && !new_est ){
-					distancia[outro][estado] = new_dist;
+				if(time && !estado ){
+					//cout << next << " outro:" << outro << " new_est:" << new_est << " new_dist:" << new_dist << " time:" << time << " 1" << endl;
+					distancia[outro][new_est] = new_dist;
 					fila.push( tres(outro, new_dist, new_est) );
 				}
-				else if( !time && new_est){
-					distancia[outro][estado] = new_dist;
+				else if( !time && estado){
+					//cout << next << " outro:" << outro << " new_est:" << new_est << " new_dist:" << new_dist << " time:" << time << " 2" << endl;
+					distancia[outro][new_est] = new_dist;
 					fila.push( tres(outro, new_dist, new_est) );
 				}
-
 			}
 
 
@@ -78,7 +83,7 @@ int main(){
 	cin >> n >> e >> s >> m;
 
 	zerar(n + 5);
-	distancia[e][0] = -1; distancia[e][1] = -1; distancia[e][2] = -1;
+	distancia[e][0] = 0; distancia[e][1] = 0; distancia[e][2] = 0;
 
 	int a, b, t;
 
@@ -89,7 +94,5 @@ int main(){
 
 	dijkstra(e);
 
-	cout << distancia[s][0] << endl;
-	cout << distancia[s][1] << endl;
-	cout << distancia[s][2] << endl;
+	cout << min( distancia[s][2], min(distancia[s][1], distancia[s][0])  ) << endl;
 }
