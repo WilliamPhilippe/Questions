@@ -1,76 +1,95 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+//NAO CONCLUÍDA
+
+typedef tuple <int, int, int> tres;
 typedef pair<int, int> par;
-vector<par> ruas[510];
-int minutos[510];
-int process[510];
-int s;
 
-void bfs(int in){
+vector< par > vizinos[502];
+int process[502][3];
+int distancia[502][3];
 
-	priority_queue < par, vector<par>, greater<par> > fila;
-	minutos[in] = -1;
-	fila.push( par(minutos[in], in) );
+void zerar(int n){
+	for(int i = 0; i < n; i++){
+		process[i][0] = 0; process[i][1] = 0; process[i][2] = 0;
+		distancia[i][0] = INT_MAX; distancia[i][1] = INT_MAX; distancia[i][2] = INT_MAX;
+	}
+}
+
+void dijkstra(int S){
+
+	queue < tres > fila;
+	fila.push( tres(S, distancia[S][0], 0) );
 
 	while(true){
 
-		int act = 1, next;
+		int act = 1;
+		int next, estado;
 
 		while(!fila.empty()){
-			next = fila.top().second;
-			fila.pop();
 
-			process[next] = 1;
-			act = 0;
+			tres aux = fila.front(); fila.pop();
+			next = get<0>(aux);
+			estado = get<2>(aux);
+
+			if(!process[next][estado]){
+				act = 0;
+				process[next][estado] = 1;
+				break;
+			}			
 		}
 
 		if(act) return;
 
-		for(int i = 0; i < ruas[next].size(); i++){
+		for(int i = 0; i < vizinos[next].size(); i++){
 
-			int min = minutos[next] + 1;
-			int atual = ruas[next][i].first;
-			int time = ruas[next][i].second;
+			int outro = vizinos[next][i].first;
+			int new_dist = distancia[next][estado] + 1;
+			int new_est = new_dist%3;
+			int time = vizinos[next][i].second;
 
-			if(minutos[atual] > min || (process[atual] && atual != s) ){
-				if(time && (min%3 == 0 || min == 0)){
-					minutos[atual] = min;
-					fila.push( par(minutos[atual], atual) );
+			if( distancia[outro][new_est] > new_dist ){
+
+				if(time && !new_est ){
+					distancia[outro][estado] = new_dist;
+					fila.push( tres(outro, new_dist, new_est) );
 				}
-				else if(!time && min%3){
-					minutos[atual] = min;
-					fila.push( par(minutos[atual], atual) );
+				else if( !time && new_est){
+					distancia[outro][estado] = new_dist;
+					fila.push( tres(outro, new_dist, new_est) );
 				}
+
 			}
+
+
 		}
 
 
 	}
-
 
 
 }
 
 int main(){
 
-	int n, e, m;
+	int n, e, s, m;
+
 	cin >> n >> e >> s >> m;
 
+	zerar(n + 5);
+	distancia[e][0] = -1; distancia[e][1] = -1; distancia[e][2] = -1;
+
 	int a, b, t;
+
 	for(int i = 0; i < m; i++){
 		cin >> a >> b >> t;
-		ruas[a].push_back( par(b, t) );
+		vizinos[a].push_back( par(b, t) );
 	}
 
-	for(int i = 0; i < n + 5; i++){
-		minutos[i] = INT_MAX;
-		process[i] = 0;
-	}
+	dijkstra(e);
 
-	bfs(e);
-
-	cout << minutos[s] + 1;
-
-	return 0;
+	cout << distancia[s][0] << endl;
+	cout << distancia[s][1] << endl;
+	cout << distancia[s][2] << endl;
 }
