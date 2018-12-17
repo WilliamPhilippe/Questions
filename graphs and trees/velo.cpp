@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//NAO CONCLUÍDA
+//NAO CONCLU?DA
 
 typedef tuple <int, int, int> tres;
 typedef pair<int, int> par;
@@ -22,30 +22,14 @@ void dijkstra(int S){
 	queue < tres > fila;
 	fila.push( tres(S, distancia[S][0], 0) );
 
-	while(true){
+	while(!fila.empty()){
 
-		int act = 1;
 		int next, estado;
 
-		while(!fila.empty()){
-
-			tres aux = fila.front(); fila.pop();
-			next = get<0>(aux);
-			estado = get<2>(aux);
-
-			if(!process[next][estado]){
-				act = 0;
-				process[next][estado] = 1;
-				break;
-			}			
-		}
-
-		
-
-		if(act) return;
-
-		//cout << "next >" << next << " estado> " << estado << endl;
-
+		tres aux = fila.front(); fila.pop();
+		next = get<0>(aux);
+		estado = get<2>(aux);
+        
 		for(int i = 0; i < vizinos[next].size(); i++){
 
 			int outro = vizinos[next][i].first;
@@ -83,7 +67,7 @@ int main(){
 	cin >> n >> e >> s >> m;
 
 	zerar(n + 5);
-	distancia[e][0] = 0; distancia[e][1] = 0; distancia[e][2] = 0;
+	distancia[e][0] = 0;
 
 	int a, b, t;
 
@@ -94,5 +78,7 @@ int main(){
 
 	dijkstra(e);
 
-	cout << min( distancia[s][2], min(distancia[s][1], distancia[s][0])  ) << endl;
+	int resp = min( distancia[s][2], min(distancia[s][1], distancia[s][0])  );
+	if(resp == INT_MAX) cout << "*" << endl;
+	else cout << resp << endl;
 }
