@@ -2,7 +2,7 @@
 using namespace std;
 
 void unindoCelulas(int *startIt, int n, int q){
-	if(q == 0) return;
+	if(q == 0 || n == 0) return;
 
 
 	int unC; cin >> unC;
@@ -39,7 +39,7 @@ void unindoCelulas(int *startIt, int n, int q){
 	// } cout << endl;
 
 	int minIndex = 0, finalIt[n - 1];
-	for(int i = 0; i < (n - 1); i++) if(newA[i] <= newA[minIndex]) minIndex = i;
+	for(int i = 0; i < (n - 1); i++) if(newA[i] < newA[minIndex]) minIndex = i;
 
 	for(int i = minIndex, newIndex = 0; i == minIndex || i%(n-1) != minIndex; i++, newIndex++){
 		finalIt[newIndex] = newA[i%(n-1)];
@@ -62,6 +62,8 @@ int main(){
 		cin >> startIt[i];
 		if (startIt[i] < startIt[minIndex]) minIndex = i;
 	}
+
+	if (n == 1) {cout << startIt[0] << endl; return 0;}
 
 
 	for (int i = minIndex, newIndex = 0; i == minIndex || i%n != minIndex ; i++, newIndex++){
