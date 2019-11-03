@@ -1,58 +1,33 @@
-//segment tree
-
 #include <bits/stdc++.h>
 using namespace std;
 
-void buildSegTree(vector<int> &segTree, int idx, int left, int right, vector<int> &dinheiros)
+int n;
+int dinheiros[1001];
+int segTree[5 * 1001];
+
+void build(int idx = 1, int start = 1, int end = n)
 {
-
-  if (right - left < 2)
+  if (start == end)
+    segTree[idx] = dinheiros[start];
+  else
   {
-    segTree[idx] = dinheiros[left];
-    return;
+    int mid = (start + end) / 2;
+    build(2 * idx, start, mid);
+    build((2 * idx) + 1, mid + 1, end);
+    segTree[idx] = segTree[idx * 2] + segTree[(2 * idx) + 1];
   }
-
-  int mid = (left + right) / 2;
-  buildSegTree(segTree, idx * 2, left, mid, dinheiros);
-  buildSegTree(segTree, idx * 2 + 1, mid, right, dinheiros);
-  segTree[idx] = segTree[idx * 2] + segTree[idx * 2 + 1];
 }
 
 int main()
 {
+  cin >> n;
+  for (int i = 1; i <= n; i++)
+    cin >> dinheiros[i];
+  build();
 
-  int nDeDinheiros, var, requests;
-  char type, value1, value2;
-  cin >> nDeDinheiros;
-
-  vector<int> dinheiros;
-
-  for (int i = 0; i < nDeDinheiros; i++)
-  {
-    cin >> var;
-    dinheiros.push_back(var);
-  }
-
-  int maxSegTreeSize = nDeDinheiros * nDeDinheiros > 100000 ? 100001 : nDeDinheiros * nDeDinheiros;
-
-  vector<int> segTree;
-  segTree.resize(maxSegTreeSize);
-  segTree[0] = -1;
-
-  buildSegTree(segTree, 1, 1, dinheiros.size(), dinheiros);
-
-  for (int i = 0; i <= nDeDinheiros; i++)
+  for (int i = 0; i <= 50; i++)
   {
     cout << segTree[i] << " ";
   }
-
-  cin >> requests;
-  getchar();
-
-  while (requests--)
-  {
-    scanf("%c %d %d\n", &type, &value1, &value2);
-  }
-
   return 0;
 }
