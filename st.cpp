@@ -61,7 +61,7 @@ public:
             swap(L, R);
         return query(1, 0, arr_size - 1, L, R);
     }
-    ll update(ll pos, ll value)
+    void update(ll pos, ll value)
     {
         update(1, 0, arr_size - 1, pos, value);
     }
