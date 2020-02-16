@@ -1,31 +1,67 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
-vector<int> my_vector[1001];
-int sized[1001];
-pair<bool, bool> visited[1001];
-bool flag = false;
+typedef pair<int, int> pii;
+typedef vector<pii> vpii;
+typedef vector<vpii> vvpii;
+
+vector<int> dist;
+int vertex, edges;
+
+const int maxN = 1e3, inf = 1e8;
+
+int n, m;
+vvpii graph;
+vector<int> prv;
+
+bool graphDetect();
 
 int main()
 {
-  int testes, n, m;
-  int T1, T2, T3;
-
+  int testes;
   cin >> testes;
-
-  while (testes--)
+  for (int i = 0; i < testes; i++)
   {
-    for (int i = 0; i < 1001; i++)
+    cin >> vertex >> edges;
+    graph.resize(vertex);
+    dist.resize(vertex, INT_MAX);
+    prv.resize(vertex);
+    for (int j = 0; j < edges; j++)
     {
-      my_vector[i].clear();
-      sized[i] = 0;
-      flag = false;
-      visited[i] = make_pair(false, false);
+      int v1, v2, w;
+      cin >> v1 >> v2 >> w;
+      graph[v1].push_back(make_pair(v2, w));
     }
 
-    cin >> n >> m;
+    graphDetect() ? cout << "possible\n" : cout << "not possible\n";
+
+    graph.clear();
+    prv.clear();
+    dist.clear();
+  }
+  return (0);
+}
+
+bool graphDetect()
+{
+  dist[0] = 0;
+  for (int i = 0; i < vertex - 1; i++)
+  {
+    for (int u = 0; u < vertex; u++)
+    {
+      for (auto &v : graph[u])
+      {
+        if (dist[u] + v.second < dist[v.first] and dist[u] != INT_MAX)
+        {
+          dist[v.first] = dist[u] + v.second, prv[v.first] = u;
+        }
+      }
+    }
   }
 
-  return 0;
+  for (int u = 0; u < vertex; u++)
+    for (auto &v : graph[u])
+      if (dist[u] + v.second < dist[v.first] and dist[u] != INT_MAX)
+        return (true);
+  return (false);
 }
