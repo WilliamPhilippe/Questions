@@ -126,7 +126,7 @@ module.exports = [
         PTS: 16.5
       },
       {
-        Season: "2019-20",
+        Season: "Career",
         Age: 26,
         Tm: "TOR",
         Lg: "NBA",
